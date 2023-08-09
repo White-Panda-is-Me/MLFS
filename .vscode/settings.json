@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "cstdio": "c",
+        "format.h": "c",
+        "algorithm": "c",
+        "atomic": "c",
+        "exception": "c",
+        "hash_map": "c",
+        "functional": "c",
+        "istream": "c",
+        "locale": "c",
+        "ostream": "c",
+        "tuple": "c",
+        "unordered_map": "c"
+    }
+}
