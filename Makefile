@@ -7,10 +7,10 @@ all: disk
 
 disk: $(BUILD_DIR)/disk.iso
 
-$(BUILD_DIR)/disk.iso: format/format.c copy/copy.c
-	$(CC) -std=c99 -Wall format/format.c -o build/format
-	$(CC) -std=c99 -Wall copy/copy.c -o build/copy
-	$(CC) -std=c99 -Wall read/read.c -o build/read
+$(BUILD_DIR)/disk.iso: format.c copy.c
+	$(CC) -std=c99 -Wall format.c -o $(BUILD_DIR)/format
+	$(CC) -std=c99 -Wall copy.c -o $(BUILD_DIR)/copy
+	$(CC) -std=c99 -Wall dir.c -o $(BUILD_DIR)/dir
 
 format:
 	sudo ./$(BUILD_DIR)/format
