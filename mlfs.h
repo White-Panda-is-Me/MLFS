@@ -59,6 +59,7 @@ typedef struct {
     char name[120];
     uint32_t blockStart;
     uint32_t fileSize;
+    uint32_t fileSizeInSector;
 } PACKED File;
 
 typedef struct {

@@ -21,14 +21,14 @@ void copy(FILE* Disk, FILE* file, char* fileName) {
     uint32_t fileSize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    uint32_t neededBocks = 0;
+    uint32_t neededBlocks = 0;
     if(fileSize % BLOCK_SIZE > 0)
-        neededBocks = (fileSize / BLOCK_SIZE) + 1;
+        neededBlocks = (fileSize / BLOCK_SIZE) + 1;
     else
-        neededBocks = (fileSize / BLOCK_SIZE);
+        neededBlocks = (fileSize / BLOCK_SIZE);
 
-    neededBocks++;          // since we need one sector to write the file informartion
-    uint32_t freeBlock = findFreeBlocks(neededBocks, Disk, bootHeader);
+    neededBlocks++;          // since we need one sector to write the file informartion
+    uint32_t freeBlock = findFreeBlocks(neededBlocks, Disk, bootHeader);
 
     // add the root entry to the root directory entries struct
     Root_Entries* rootEntries = malloc(sizeof(rootEntries));
@@ -46,14 +46,15 @@ void copy(FILE* Disk, FILE* file, char* fileName) {
     fwrite(rootEntries, sizeof(Root_Entries), 1, Disk);
 
     Entry entry;
-    entry.Info.file.blockStart = freeBlock;
+    entry.Info.file.blockStart = (freeBlock + 1);
     entry.Info.file.fileSize = fileSize;
+    entry.Info.file.fileSizeInSector = (neededBlocks - 1);
     entry.inode.inode_num = freeInode;
     entry.inode.CreatedDate = 0;
     entry.inode.CreatedTime = 0;
     entry.inode.flags = MLFS_FLAG_EXECUTABALE | MLFS_FLAG_READABLE | MLFS_FLAG_WRITABLE;
     entry.inode.inode_num = freeInode;
-    strcpy(entry.Info.file.name, fileName);
+    strncpy(entry.Info.file.name, fileName, 120);
 
     fseek(Disk, (freeBlock * BLOCK_SIZE), SEEK_SET);
     fwrite(&entry, sizeof(Entry), 1, Disk);
